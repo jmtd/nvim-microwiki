@@ -27,7 +27,7 @@ Use your favourite plugin manager. I'm using
 
 ```Vim
 call plug#begin('~/git/mine/neovim/test-µwiki/plugged')
-  Plug 'https://github.com/jmtd/nvim-microwiki'
+  Plug 'jmtd/nvim-microwiki'
 call plug#end()
 ```
 
