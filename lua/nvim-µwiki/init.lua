@@ -69,24 +69,29 @@ end
 
 M.followWikiLink = function()
   local base = M.reportNodeAtCursor()
-  if base then
-    local fname = vim.api.nvim_eval("expand('%:h').'/"..base.."'.&suffixesadd")
-    local bufnr = vim.api.nvim_get_current_buf()
-    local from  = vim.fn.getpos(".")
-    local stack = vim.fn.gettagstack()
-    from[1] = bufnr
-    stack.items = {{
-      bufnr   = bufnr,
-      tagname = base,
-      from    = from,
-      matchnr = 1,
-    }}
-
-    vim.cmd.edit({ args = { fname } })
-
-    -- XXX was the above successful? If not, would we abort here?
-    vim.fn.settagstack(vim.api.nvim_get_current_win(), stack, 't')
+  if not base then
+    return false
   end
+
+  local fname = vim.api.nvim_eval("expand('%:h').'/"..base.."'.&suffixesadd")
+  local bufnr = vim.api.nvim_get_current_buf()
+  local from  = vim.fn.getpos(".")
+  local stack = vim.fn.gettagstack()
+  from[1] = bufnr
+  stack.items = {{
+    bufnr   = bufnr,
+    tagname = base,
+    from    = from,
+    matchnr = 1,
+  }}
+
+  vim.cmd.edit({ args = { fname } })
+
+  -- XXX was the above successful? If not, would we abort here?
+  if 0 == vim.fn.settagstack(vim.api.nvim_get_current_win(), stack, 't') then
+    return true
+  end
+  return false
 end
 
 M.nextWikiLink = function()
