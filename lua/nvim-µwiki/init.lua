@@ -48,7 +48,6 @@ M.reportNode = function(node, depth)
     local win       = vim.api.nvim_get_current_win()
     local row1,col0 = unpack(vim.api.nvim_win_get_cursor(win))
     local row0,col1 = row1 - 1, col0 + 1
-    vim.print("cursor is at "..row1..","..col1)
 
     -- cursor is here >[[test]], retry on next column
     -- Hit recursion depth limit on this character
