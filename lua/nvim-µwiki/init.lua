@@ -102,14 +102,17 @@ M.prevWikiLink = function()
   vim.fn.search("[[", "b")--backwards
 end
 
+M.decorateWord = function()
+  vim.api.nvim_exec2('normal! diw', {})
+  local word = vim.fn.getreg('-')
+  vim.api.nvim_exec2('normal! i[['..word..']]', {})
+end
+
 M.maybeFollowWikiLink = function()
   if wiki.followWikiLink() then
     return true
   end
-  -- wrap wiki word instead
-  vim.api.nvim_exec2('normal! diw', {})
-  local word = vim.fn.getreg('-')
-  vim.api.nvim_exec2('normal! i[['..word..']]', {})
+  M.decorateWord()
 end
 
 return M
