@@ -32,6 +32,17 @@ M.reportNode = function(node, depth)
     parser:parse()
   end
 
+  -- if the Wiki extension is enabled, this might match: [[test]]
+  if node:type() == "link_destination" then           --   ^^^^
+    node = node:parent()
+  end -- fall through
+
+  -- if the Wiki extension is enabled, this might match: [[test]]
+  if node:type() == "wiki_link" then                  -- ^^    ^^
+    node = node:named_child(0)
+    return vim.treesitter.get_node_text(node, buf)
+  end
+
   --                  [[test]]
   --    cursor is here ^ or ^
   if node:type() == "shortcut_link" then
