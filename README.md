@@ -33,49 +33,28 @@ call plug#end()
 
 ## ⚙️ Configuration
 
-You need to have TreeSitter enabled for Markdown documents.
-(This isn't needed for neovim >= 0.12.0, where it is [enabled by
-default](https://github.com/neovim/neovim/pull/37907)).
-
 ```Lua
-vim.api.nvim_create_autocmd( 'FileType', { pattern = 'markdown',
-  callback = function(args)
+vim.api.nvim_create_autocmd('FileType', {pattern='markdown', callback=function(args)
+
+    -- You need to have TreeSitter enabled for Markdown documents. (This
+    -- isn't needed for neovim >= 0.12.0, where it is enabled by default).
     vim.treesitter.start(args.buf, 'markdown')
-  end
-})
-```
 
-The plugin determines your preferred file extension by reading the
-first value from vim's existing `suffixesadd` option, so you should
-specify it:
-
-```Lua
-vim.api.nvim_create_autocmd( 'FileType', { pattern = 'markdown',
-  callback = function(args)
+    -- nvim-µwiki determines your preferred file extension by reading the
+    -- first value from vim's existing `suffixesadd` option
     vim.opt_local.suffixesadd = { ".mdwn" , ".md" }
-  end
-})
-```
 
-The plugin doesn't create any key mappings. Here are some suggestions:
+    -- Here are some suggested key mappings:
+    local wiki = require("nvim-µwiki")
+    vim.keymap.set('n', '<leader>wd', wiki.todayDatePage)
+    vim.keymap.set('n', '<C-]>',      wiki.followWikiLink,      {buffer = true})
+    vim.keymap.set('n', '<CR>',       wiki.maybeFollowWikiLink, {buffer = true})
+    vim.keymap.set('n', '<Tab>',      wiki.nextWikiLink,        {buffer = true})
+    vim.keymap.set('n', '<S-Tab>',    wiki.prevWikiLink,        {buffer = true})
+    vim.keymap.set('n', '<C-Down>',   wiki.nextDatePage,        {buffer = true})
+    vim.keymap.set('n', '<C-Up>',     wiki.prevDatePage,        {buffer = true})
 
-```Lua
-local wiki = require("nvim-µwiki")
-
--- global mapping
-vim.keymap.set('n', '<leader>wd', wiki.todayDatePage)
-
--- buffer-local to markdown files
-vim.api.nvim_create_autocmd( 'FileType', { pattern = 'markdown',
-  callback = function(args)
-    vim.keymap.set('n', '<C-]>',    wiki.followWikiLink, {buffer = true})
-    vim.keymap.set('n', '<CR>',     wiki.maybeFollowWikiLink, {buffer = true})
-    vim.keymap.set('n', '<Tab>',    wiki.nextWikiLink,   {buffer = true})
-    vim.keymap.set('n', '<S-Tab>',  wiki.prevWikiLink,   {buffer = true})
-    vim.keymap.set('n', '<C-Down>', wiki.nextDatePage,   {buffer = true})
-    vim.keymap.set('n', '<C-Up>',   wiki.prevDatePage,   {buffer = true})
-  end
-})
+end })
 ```
 
 ## 🧐 See also
