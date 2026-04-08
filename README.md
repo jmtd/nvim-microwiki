@@ -4,15 +4,17 @@ A minimalist plugin to add basic wiki functions to [Markdown] documents.
 
 ## ✨ Features
 
+Relevant function names in parentheses
+
  * Jump the cursor between wiki-links (enclosed in double-braces, e.g. `[[this]]`)
-   in a document.
- * Follow wiki-links to existing pages where they exist, or start editing empty buffers
+   in a document (`prevWikiLink`, `nextWikiLink`)
+ * Follow wiki-links to existing pages where they exist, or start editing empty buffers (`maybeFollowWikiLink`)
+ * Quickly edit a page corresponding to Today's date (`todayDatePage`)
+ * Quickly Navigate to previous/next days from any page with a filename matching
+   `%Y-%m-%d` e.g. `2025-01-23` (`prevDatePage`, `nextDatePage`)
  * Populate the tag stack as you follow wiki-links
  * Don't take over the FileType: play nicely with any other Markdown
    configuration or plugins you are using.
- * Quickly edit a page corresponding to Today's date
- * Quickly Navigate to previous/next days from any page with a filename matching
-   `%Y-%m-%d` e.g. `2025-01-23`
 
 ## ⚡️ Requirements
 
