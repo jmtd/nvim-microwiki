@@ -60,7 +60,7 @@ vim.keymap.set('n', '<leader>wd', wiki.todayDatePage)
 vim.api.nvim_create_autocmd( 'FileType', { pattern = 'markdown',
   callback = function(args)
     vim.keymap.set('n', '<C-]>',    wiki.followWikiLink, {buffer = true})
-    vim.keymap.set('n', '<CR>',     wiki.followWikiLink, {buffer = true})
+    vim.keymap.set('n', '<CR>',     wiki.maybeFollowWikiLink, {buffer = true})
     vim.keymap.set('n', '<Tab>',    wiki.nextWikiLink,   {buffer = true})
     vim.keymap.set('n', '<S-Tab>',  wiki.prevWikiLink,   {buffer = true})
     vim.keymap.set('n', '<C-Down>', wiki.nextDatePage,   {buffer = true})
