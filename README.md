@@ -40,7 +40,20 @@ wiki.setup({
 })
 ```
 
-You need to have TreeSitter enabled for Markdown documents:
+The plugin determines your preferred file extension by reading the
+`suffixesadd` option, so you should specify it:
+
+```Lua
+vim.api.nvim_create_autocmd( 'FileType', { pattern = 'markdown',
+  callback = function(args)
+    vim.opt_local.suffixesadd = { ".mdwn" , ".md" }
+  end
+})
+```
+
+You need to have TreeSitter enabled for Markdown documents. This is needed for
+neovim < 0.12.0, in which it was [enabled by
+default](https://github.com/neovim/neovim/pull/37907):
 
 ```Lua
 vim.api.nvim_create_autocmd( 'FileType', { pattern = 'markdown',

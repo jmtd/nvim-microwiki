@@ -5,7 +5,17 @@
 local M = {}
 M.root = "/"
 
+local preferredSuffix = function()
+  local suf = ".md"
+  local suffixes = vim.opt.suffixesadd:get()
+  if #(suffixes) > 0 then
+    suf = suffixes[1]
+  end
+  return suf
+end
+
 local D = require("nvim-µwiki.dates")
+D.suffix = preferredSuffix
 M.todayDatePage = function() D.todayDatePage(root) end
 M.nextDatePage  = D.nextDatePage
 M.prevDatePage  = D.prevDatePage
@@ -84,7 +94,8 @@ M.followWikiLink = function()
     return false
   end
 
-  local fname = vim.api.nvim_eval("expand('%:h').'/"..base.."'.&suffixesadd")
+  local suffix= preferredSuffix()
+  local fname = vim.api.nvim_eval("expand('%:h').'/"..base.."'.'"..suffix.."'")
   local bufnr = vim.api.nvim_get_current_buf()
   local from  = vim.fn.getpos(".")
   local stack = vim.fn.gettagstack()

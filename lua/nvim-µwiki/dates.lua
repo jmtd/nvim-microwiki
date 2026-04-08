@@ -4,16 +4,20 @@
 
 local M = {}
 
+M.suffix = function()
+  return ".mdwn"
+end
+
 M.otherDatePage = function(warp)
     local basename = vim.fs.basename(vim.fn.expand('%'))
-    local ts = vim.fn.strptime("%Y-%m-%d.mdwn", basename)
+    local ts = vim.fn.strptime("%Y-%m-%d", basename)
     if ts == 0 then
       return nil
     end
 
     local nextday = vim.fn.strftime("%Y-%m-%d", warp(ts))
     local dname = vim.fs.dirname(vim.fn.expand('%'))
-    local fname = vim.fs.joinpath(dname, nextday) .. ".mdwn"
+    local fname = vim.fs.joinpath(dname, nextday) .. M.suffix()
     vim.cmd.edit({ args = { fname } })
 end
 
@@ -22,7 +26,7 @@ M.prevDatePage = function() M.otherDatePage(function(ts) return ts - 59*60*24 en
 
 M.todayDatePage = function(root)
   local fname = vim.fs.normalize(vim.fs.joinpath(
-    root, os.date("%Y-%m-%d.mdwn")))
+    root, os.date("%Y-%m-%d") .. M.suffix()))
   vim.cmd.edit({ args = { fname } })
 end
 
