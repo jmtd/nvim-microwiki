@@ -23,37 +23,19 @@ A minimalist plugin to add basic wiki functions to [Markdown] documents.
 ## 📦 Installation
 
 Use your favourite plugin manager. I'm using
-[vim-plug](https://github.com/junegunn/vim-plug/). e.g.:
+[vim-plug](https://github.com/junegunn/vim-plug/). E.g.:
 
 ```Vim
-call plug#begin('~/git/mine/neovim/test-µwiki/plugged')
+call plug#begin()
   Plug 'jmtd/nvim-microwiki'
 call plug#end()
 ```
 
 ## ⚙️ Configuration
 
-```Lua
-local wiki = require("nvim-µwiki")
-wiki.setup({
-  root = '$HOME/rh/vimwiki',
-})
-```
-
-The plugin determines your preferred file extension by reading the
-`suffixesadd` option, so you should specify it:
-
-```Lua
-vim.api.nvim_create_autocmd( 'FileType', { pattern = 'markdown',
-  callback = function(args)
-    vim.opt_local.suffixesadd = { ".mdwn" , ".md" }
-  end
-})
-```
-
-You need to have TreeSitter enabled for Markdown documents. This is needed for
-neovim < 0.12.0, in which it was [enabled by
-default](https://github.com/neovim/neovim/pull/37907):
+You need to have TreeSitter enabled for Markdown documents.
+(This isn't needed for neovim >= 0.12.0, where it is [enabled by
+default](https://github.com/neovim/neovim/pull/37907)).
 
 ```Lua
 vim.api.nvim_create_autocmd( 'FileType', { pattern = 'markdown',
@@ -63,9 +45,23 @@ vim.api.nvim_create_autocmd( 'FileType', { pattern = 'markdown',
 })
 ```
 
-The plugin doesn't create any mappings. Here are some suggestions:
+The plugin determines your preferred file extension by reading the
+first value from vim's existing `suffixesadd` option, so you should
+specify it:
 
 ```Lua
+vim.api.nvim_create_autocmd( 'FileType', { pattern = 'markdown',
+  callback = function(args)
+    vim.opt_local.suffixesadd = { ".mdwn" , ".md" }
+  end
+})
+```
+
+The plugin doesn't create any key mappings. Here are some suggestions:
+
+```Lua
+local wiki = require("nvim-µwiki")
+
 -- global mapping
 vim.keymap.set('n', '<leader>wd', wiki.todayDatePage)
 
@@ -89,7 +85,7 @@ vim.api.nvim_create_autocmd( 'FileType', { pattern = 'markdown',
 
 ## Authors
 
- * Copyright © 2025 [Jonathan Dowland], all rights reserved.
+ * Copyright © 2025-2026 [Jonathan Dowland], all rights reserved.
 
 Distributed under the GNU General Public License, version 3. See [LICENSE](LICENSE).
 
