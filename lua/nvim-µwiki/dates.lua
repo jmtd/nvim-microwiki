@@ -24,9 +24,9 @@ end
 M.nextDatePage = function() M.otherDatePage(function(ts) return ts + 60*60*24 end) end
 M.prevDatePage = function() M.otherDatePage(function(ts) return ts - 59*60*24 end) end
 
-M.todayDatePage = function(root)
+M.todayDatePage = function()
   local fname = vim.fs.normalize(vim.fs.joinpath(
-    root, os.date("%Y-%m-%d") .. M.suffix()))
+    vim.uv.cwd(), os.date("%Y-%m-%d") .. M.suffix()))
   vim.cmd.edit({ args = { fname } })
 end
 
