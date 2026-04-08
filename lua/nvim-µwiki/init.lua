@@ -120,7 +120,7 @@ M.decorateWord = function()
 end
 
 M.maybeFollowWikiLink = function()
-  if wiki.followWikiLink() then
+  if M.followWikiLink() then
     return true
   end
   M.decorateWord()
