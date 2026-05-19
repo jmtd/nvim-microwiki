@@ -15,9 +15,11 @@ end
 
 local D = require("nvim-µwiki.dates")
 D.suffix = preferredSuffix
-M.todayDatePage = function() D.todayDatePage() end
+M.todayDatePage = D.todayDatePage
 M.nextDatePage  = D.nextDatePage
 M.prevDatePage  = D.prevDatePage
+M.prevWeekDayPage = D.prevWeekDayPage
+M.nextWeekDayPage = D.nextWeekDayPage
 
 M.setup = function(config)
   return M
