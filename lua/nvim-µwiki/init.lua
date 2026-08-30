@@ -1,4 +1,4 @@
--- Copyright © 2025 [Jonathan Dowland], all rights reserved.
+-- Copyright © 2026 [Jonathan Dowland], all rights reserved.
 -- Distributed under the GNU General Public License, version 3.
 -- See LICENSE.
 
