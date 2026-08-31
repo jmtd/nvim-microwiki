@@ -1,6 +1,6 @@
 # nvim-µwiki
 
-A minimalist plugin to add basic wiki functions to [Markdown] documents.
+A minimalist [Neovim] plugin to add basic wiki functions to [Markdown] documents.
 
 ## ✨ Features
 
