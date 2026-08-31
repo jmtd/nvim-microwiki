@@ -124,11 +124,48 @@ M.prevWikiLink = function()
   vim.fn.search("[[", "b")--backwards
 end
 
-M.decorateWord = function()
-  vim.api.nvim_exec2('normal! diw', {})
-  local word = vim.fn.getreg('-')
-  vim.api.nvim_exec2('normal! i[['..word..']]', {})
+local isWordChar = function(char)
+  return (vim.fn.charclass(char) == 2)
 end
+
+M.decorateWord = function()
+  local line = vim.api.nvim_get_current_line()
+  local col  = vim.fn.col('.')
+  local char = string.sub(line, col, col)
+
+  if not isWordChar(char) then
+    return
+  end
+
+  -- rewind to first non-word character
+  while col > 1 do
+    if not isWordChar(string.sub(line, col, col)) then
+      col = col + 1
+      break
+    end
+    col = col - 1
+  end
+  local wordStartCol = col
+
+  -- wind forward to last word character
+  while col < #line do
+    if not isWordChar(string.sub(line, col, col)) then
+      col = col - 1
+      break
+    end
+    col = col + 1
+  end
+  local wordEndCol = col
+
+  local newline = string.sub(line,1, wordStartCol-1)
+    .. "[["
+    .. string.sub(line, wordStartCol, wordEndCol)
+    .. "]]"
+    .. string.sub(line, wordEndCol + 1, #line)
+
+  vim.api.nvim_set_current_line(newline)
+end
+
 
 M.maybeFollowWikiLink = function()
   if M.followWikiLink() then
