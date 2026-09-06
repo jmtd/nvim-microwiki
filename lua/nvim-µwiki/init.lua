@@ -4,6 +4,8 @@
 
 local M = {}
 
+local log = require("nvim-µwiki.log")
+
 local preferredSuffix = function()
   local suf = ".md"
   local suffixes = vim.opt.suffixesadd:get()
@@ -37,12 +39,14 @@ M.reportNodeAtCursor = function()
 end
 
 M.reportNode = function(node, depth)
+  log.trace("reportNode")
+
   if depth == 0 then
-    vim.print("reportNode: reached max recursion depth, aborting")
+    log.error("reportNode: reached max recursion depth, aborting")
     return nil
   end
 
-  -- XXX: does this resolve the occasional breakage?
+  -- this is necessary
   local buf    = vim.api.nvim_get_current_buf()
   local parser = vim.treesitter.get_parser(buf)
   if not parser:is_valid() then
@@ -104,6 +108,7 @@ M.reportNode = function(node, depth)
 end
 
 M.followWikiLink = function()
+  log.trace("followWikiLink")
   local base = M.reportNodeAtCursor()
   if not base then
     return false
@@ -183,6 +188,7 @@ end
 
 
 M.maybeFollowWikiLink = function()
+  log.trace("maybeFollowWikiLink")
   if M.followWikiLink() then
     return true
   end
