@@ -26,7 +26,14 @@ M.setup = function(config)
 end
 
 M.reportNodeAtCursor = function()
-  return M.reportNode(vim.treesitter.get_node({lang="markdown_inline"}), 5)
+  local range = true -- set to {start_row, end_row} to possibly improve performance
+  vim.treesitter.get_parser(0, "markdown_inline"):parse(range)
+  local node = vim.treesitter.get_node({lang="markdown_inline"})
+  if node == nil then
+    vim.print("reportNodeAtCursor: get_node failed")
+    return -- XXX: visible error!
+  end
+  return M.reportNode(node, 5)
 end
 
 M.reportNode = function(node, depth)
@@ -74,15 +81,23 @@ M.reportNode = function(node, depth)
     -- Hit recursion depth limit on this character
     if "[[" == string.sub(line, col1,col1+1) then
       vim.print("recursing at "..row1..","..col1+1)
-      return M.reportNode(vim.treesitter.get_node({
-        lang="markdown_inline", pos={row0, col0+1}}), depth-1)
+
+      local range = true -- set to {start_row, end_row} to possibly improve performance
+      vim.treesitter.get_parser(0, "markdown_inline"):parse(range)
+
+      local node = vim.treesitter.get_node({ lang="markdown_inline", pos={row0, col0+1}})
+      return M.reportNode(node, depth-1)
 
     -- [[test]]< cursor is here, retry on previous column
     -- Hit recursion depth limit on this character
     elseif "]]" == string.sub(line, col1-1,col1) then
       vim.print("recursing at "..row1..","..col1-1)
-      return M.reportNode(vim.treesitter.get_node({
-        lang="markdown_inline", pos={row0, col0-1}}), depth-1)
+
+      local range = true -- set to {start_row, end_row} to possibly improve performance
+      vim.treesitter.get_parser(0, "markdown_inline"):parse(range)
+
+      local node = vim.treesitter.get_node({ lang="markdown_inline", pos={row0, col0-1}})
+      return M.reportNode(node, depth-1)
     end
   end
   return nil
